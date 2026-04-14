@@ -7,32 +7,20 @@ class Engine {
         this.firstSceneClass = firstSceneClass;
         this.storyDataUrl = storyDataUrl;
 
-        // Build the HUD Layout
-        this.container = document.body.appendChild(document.createElement("div"));
-        this.container.id = "game-container";
+        // INSTEAD of creating elements, grab the ones we made in index.html
+        this.header = document.getElementById("game-title");
+        this.output = document.getElementById("story-text-container");
+        this.actionsContainer = document.getElementById("choices-container");
+        this.inventoryOutput = document.getElementById("inventory-list");
 
-        // Left Panel: Story & Actions
-        this.mainPanel = this.container.appendChild(document.createElement("div"));
-        this.mainPanel.className = "panel";
-        this.header = this.mainPanel.appendChild(document.createElement("h1"));
-        this.output = this.mainPanel.appendChild(document.createElement("div"));
-        this.output.id = "story-output";
-        this.actionsContainer = this.mainPanel.appendChild(document.createElement("div"));
-        this.actionsContainer.id = "actions-container";
-
-        // Right Panel: Inventory & Stats
-        this.sidePanel = this.container.appendChild(document.createElement("div"));
-        this.sidePanel.className = "panel";
-        let invHeader = this.sidePanel.appendChild(document.createElement("h1"));
-        invHeader.innerText = "// INVENTORY_DATA";
-        this.inventoryOutput = this.sidePanel.appendChild(document.createElement("div"));
-
-        fetch(storyDataUrl)
-            .then((response) => response.json())
-            .then((json) => {
+        fetch(storyDataUrl).then(
+            (response) => response.json()
+        ).then(
+            (json) => {
                 this.storyData = json;
                 this.gotoScene(firstSceneClass);
-            });
+            }
+        );
     }
 
     gotoScene(sceneClass, data) {
@@ -48,7 +36,7 @@ class Engine {
                 this.actionsContainer.removeChild(this.actionsContainer.firstChild);
             }
             this.scene.handleChoice(data);
-        };
+        }
     }
 
     setTitle(title) {
@@ -60,28 +48,34 @@ class Engine {
         let div = document.createElement("div");
         div.innerHTML = msg + "<br><br>";
         this.output.appendChild(div);
-        // Auto-scroll to bottom like a real terminal
-        this.output.scrollTop = this.output.scrollHeight;
+
+        // setTimeout gives the browser a millisecond to draw the text 
+        // before calculating the exact bottom of the scroll container.
+        setTimeout(() => {
+            this.output.scrollTop = this.output.scrollHeight;
+
+            // Alternatively, for a smooth scrolling effect, you can use:
+            // div.scrollIntoView({ behavior: "smooth", block: "end" });
+        }, 10);
     }
 
+    // New method to visually update the inventory box
     updateInventory(inventoryArray, itemDataDb) {
-        // Clear current inventory UI
         while (this.inventoryOutput.firstChild) {
             this.inventoryOutput.removeChild(this.inventoryOutput.firstChild);
         }
 
         if (inventoryArray.length === 0) {
-            this.inventoryOutput.innerHTML = "<p style='color:#555;'>No bio-matter or tech acquired.</p>";
+            this.inventoryOutput.innerHTML = "<p style='color:#555;'>No bio-matter acquired.</p>";
             return;
         }
 
-        // Render each item visually
         inventoryArray.forEach(itemId => {
             let itemInfo = itemDataDb[itemId];
             if (itemInfo) {
                 let itemDiv = document.createElement("div");
-                itemDiv.className = "inventory-item";
-                itemDiv.innerHTML = `<strong>[+] ${itemInfo.Name}</strong>${itemInfo.Desc}`;
+                itemDiv.style.marginBottom = "10px";
+                itemDiv.innerHTML = `<strong style="color:#00FFCC;">[+] ${itemInfo.Name}</strong><br><span style="color:#aaa; font-size:0.9em;">${itemInfo.Desc}</span>`;
                 this.inventoryOutput.appendChild(itemDiv);
             }
         });

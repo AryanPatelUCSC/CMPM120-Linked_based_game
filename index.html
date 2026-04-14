@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graft & Rot</title>
     <style>
+        /* --- CSS STYLING --- */
         :root {
             --bg-color: #050505;
             --text-main: #FFFFFF;
@@ -19,47 +20,76 @@
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
+            /* Keep the body exactly the height of the window */
+            height: 100vh;
+            box-sizing: border-box; /* Ensures padding doesn't add to the 100vh */
 
-        #game-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
-            height: 90vh;
-        }
-
-        .panel {
-            border: 2px solid var(--accent-cyan);
-            padding: 20px;
-            background-color: #0a0a0a;
             display: flex;
             flex-direction: column;
+            overflow: hidden; /* Prevent the whole page from ever scrolling */
         }
 
         h1 {
             color: var(--accent-cyan);
-            text-transform: uppercase;
-            font-size: 1.5em;
-            border-bottom: 1px solid var(--accent-cyan);
+            border-bottom: 2px solid var(--accent-cyan);
             padding-bottom: 10px;
             margin-top: 0;
+            flex-shrink: 0; /* Stop the title from squishing */
         }
 
-        #story-output {
+        #game-main-container {
+            display: flex;
+            flex-direction: column;
             flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            /* This is critical: It forces the container to fit inside the remaining body height */
+            min-height: 0;
         }
 
-        #actions-container {
+        #game-content-wrapper {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            gap: 20px;
+            margin-bottom: 20px;
+            /* This is also critical: it passes the height constraint down */
+            min-height: 0;
+        }
+
+        /* The Scrolling Story Area */
+        #story-text-container {
+            flex-grow: 1;
+            padding: 15px;
+            border: 1px solid #444;
+            background-color: #0a0a0a;
+            /* Force the scrollbar to appear */
+            overflow-y: auto;
+        }
+
+        /* The Fixed Inventory Area */
+        #inventory-container {
+            width: 250px;
+            padding: 15px;
+            border: 1px solid var(--accent-cyan);
+            background-color: #0a0a0a;
+            flex-shrink: 0; /* Keep the inventory from squishing horizontally */
+            overflow-y: auto; /* Let inventory scroll if you get tons of items */
+        }
+
+            #inventory-container h2 {
+                margin-top: 0;
+                color: var(--accent-cyan);
+                font-size: 1.2em;
+            }
+
+        /* The Fixed Choices Area */
+        #choices-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex-shrink: 0; /* Ensures the buttons never get squished off screen */
+            /* Give it a max height so it can scroll if there are too many buttons */
+            max-height: 30vh;
+            overflow-y: auto;
         }
 
         button {
@@ -77,22 +107,26 @@
                 background-color: var(--accent-lime);
                 color: #000;
             }
-
-        .inventory-item {
-            border: 1px solid #444;
-            padding: 10px;
-            margin-bottom: 10px;
-            color: #aaa;
-        }
-
-            .inventory-item strong {
-                color: var(--accent-cyan);
-                display: block;
-            }
     </style>
     <script src="engine.js"></script>
     <script src="rules.js"></script>
 </head>
 <body>
+    <h1 id="game-title">Loading...</h1>
+
+    <div id="game-main-container">
+        <div id="game-content-wrapper">
+            <div id="story-text-container"></div>
+
+            <div id="inventory-container">
+                <h2>// INVENTORY</h2>
+                <div id="inventory-list">
+                    <p style="color: #555;">No bio-matter acquired.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="choices-container"></div>
+    </div>
 </body>
 </html>
