@@ -2,9 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Graft & Rot</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #FFFFFF;
+            --accent-cyan: #00FFCC;
+            --accent-lime: #CCFF00;
+            --danger-red: #FF3366;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #game-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            height: 90vh;
+        }
+
+        .panel {
+            border: 2px solid var(--accent-cyan);
+            padding: 20px;
+            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            font-size: 1.5em;
+            border-bottom: 1px solid var(--accent-cyan);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        #story-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        #actions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background-color: transparent;
+            color: var(--accent-lime);
+            border: 1px solid var(--accent-lime);
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            button:hover {
+                background-color: var(--accent-lime);
+                color: #000;
+            }
+
+        .inventory-item {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+
+            .inventory-item strong {
+                color: var(--accent-cyan);
+                display: block;
+            }
+    </style>
     <script src="engine.js"></script>
     <script src="rules.js"></script>
 </head>

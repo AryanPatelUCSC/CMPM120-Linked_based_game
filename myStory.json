@@ -1,58 +1,153 @@
 {
-    "Title": "Campus Life on the West Side",
-    "Credits": "Created by Adam Smith (amsmith@ucsc.edu).",
-    "InitialLocation": "Kresge",
-    "Locations": {
-        "Kresge": {
-            "Body": "This is Kresge College, lots of nice trees.",
-            "Choices": [
-                {
-                    "Text": "South",
-                    "Target": "Porter"
-                }
-            ]
-        },
-        "Porter": {
-            "Body": "This is Porter College, the trees are nice here too.",
-            "Choices": [
-                {
-                    "Text": "North",
-                    "Target": "Kresge"
-                },
-                {
-                    "Text": "South",
-                    "Target": "Rachel Carson"
-                }
-            ]
-        },
-        "Rachel Carson": {
-            "Body": "Rachel Carson College, more sun and fewer trees.",
-            "Choices": [
-                {
-                    "Text": "North",
-                    "Target": "Porter"
-                },
-                {
-                    "Text": "South",
-                    "Target": "Oakes"
-                }
-            ]
-        },
-        "Oakes": {
-            "Body": "Oakes College, even the buildings have tree bark on them.",
-            "Choices": [
-                {
-                    "Text": "North",
-                    "Target": "Rachel Carson"
-                },
-                {
-                    "Text": "South",
-                    "Target": "Beyond"
-                }
-            ]
-        },
-        "Beyond": {
-            "Body": "Grass, don't forget to check for ticks!"
-        }
+  "Title": "GRAFT & ROT",
+  "Credits": "Terminal Simulation End.",
+  "InitialLocation": "SurfaceVat",
+  "Items": {
+    "scanner": {
+      "Name": "Synaptic Scanner",
+      "Desc": "Reveals anomalous paths."
+    },
+    "biomass": {
+      "Name": "Raw Biomass",
+      "Desc": "Unprocessed fungal tissue."
+    },
+    "energy_cell": {
+      "Name": "Energy Cell",
+      "Desc": "A drained but functional battery."
+    },
+    "lungs": {
+      "Name": "Filtration Lungs",
+      "Desc": "Spliced bio-tech. Filters toxic spores."
+    },
+    "gland": {
+      "Name": "Pheromone Gland",
+      "Desc": "A dripping, biological key."
     }
+  },
+  "Locations": {
+    "SurfaceVat": {
+      "Body": "You wake up in the nutrient fluid, phantom pains echoing from your last death. You deploy a new Graft.",
+      "Choices": [
+        {
+          "Text": "Descend into The Cradle",
+          "Target": "FungalArteries"
+        }
+      ]
+    },
+    "FungalArteries": {
+      "Body": "The central hub. Giant bioluminescent veins pulse along the walls.",
+      "Loot": "biomass",
+      "Choices": [
+        {
+          "Text": "Explore the Overgrown Labs",
+          "Target": "OvergrownLabs"
+        },
+        {
+          "Text": "Brave the Toxic Spawning Pools",
+          "Target": "ToxicPools"
+        },
+        {
+          "Text": "Approach the Chitinous Gate",
+          "Target": "ChitinousGate"
+        },
+        {
+          "Text": "[SCANNER] Reveal hidden wall breach",
+          "Target": "SecretCache",
+          "RequiresHidden": "scanner"
+        }
+      ]
+    },
+    "SecretCache": {
+      "Body": "You squeeze through the hidden breach revealed by your scanner. It's an old surveyor's camp.",
+      "Loot": "energy_cell",
+      "Choices": [
+        {
+          "Text": "Return to Arteries",
+          "Target": "FungalArteries"
+        }
+      ]
+    },
+    "OvergrownLabs": {
+      "Body": "Shattered containment tubes leak spores. A Mycelial Network Node hums here. There is also an Empty Stasis Pod.",
+      "IsSplicingStation": true,
+      "SavePoint": true,
+      "Choices": [
+        {
+          "Text": "Search for salvage",
+          "Target": "FindScanner"
+        },
+        {
+          "Text": "Return to the Arteries",
+          "Target": "FungalArteries"
+        }
+      ]
+    },
+    "FindScanner": {
+      "Body": "You dig through the rot and find a functioning piece of tech.",
+      "Loot": "scanner",
+      "Choices": [
+        {
+          "Text": "Back to the lab floor",
+          "Target": "OvergrownLabs"
+        }
+      ]
+    },
+    "ToxicPools": {
+      "Body": "The air is thick with corrosive spores. Your lungs burn.",
+      "Choices": [
+        {
+          "Text": "Retreat to the Arteries",
+          "Target": "FungalArteries"
+        },
+        {
+          "Text": "Push deeper into the Alpha Chamber",
+          "Target": "AlphaChamber",
+          "Requires": "lungs"
+        },
+        {
+          "Text": "Push forward blindly (No filtration)",
+          "Target": "NeuralSeverance"
+        }
+      ]
+    },
+    "AlphaChamber": {
+      "Body": "A massive fungal bloom pulses rhythmically.",
+      "Loot": "gland",
+      "Choices": [
+        {
+          "Text": "Flee back to Arteries",
+          "Target": "FungalArteries"
+        }
+      ]
+    },
+    "ChitinousGate": {
+      "Body": "A massive biological door blocks the path to the Extraction Pods. It requires a specific biological signature.",
+      "Choices": [
+        {
+          "Text": "Turn back",
+          "Target": "FungalArteries"
+        },
+        {
+          "Text": "[UNLOCK] Smear the Pheromone Gland on the sensory nodes",
+          "Target": "DeepPods",
+          "Requires": "gland"
+        }
+      ]
+    },
+    "DeepPods": {
+      "Body": "You secure the anomaly cores and hit launch. Extraction successful.",
+      "Choices": [
+        {
+          "Text": "Sever the link",
+          "Target": "EndState"
+        }
+      ]
+    },
+    "NeuralSeverance": {
+      "Body": "Your Graft's nervous system collapses. The neural link snaps violently. BLINDING PAIN."
+    },
+    "EndState": {
+      "Body": "You wake up in the Surface Vat, exhausted but victorious. The cores are secured."
+    }
+  }
 }
